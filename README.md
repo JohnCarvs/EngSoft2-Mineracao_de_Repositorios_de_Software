@@ -20,7 +20,8 @@ A ferramenta analisa diferentes artefatos de um repositório, como commits, hist
 
 - O usuário fornece o caminho ou URL de um repositório Git
 - A ferramenta, usando Python e a API do github, coleta os dados do repositório
-- São aplicadas métricas e heurísticas para análise
+- São aplicadas métricas e heurísticas calculadas para análise
+- É gerado um dashboard explicativo da qualidade do repositório  
 - Os resultados são exibidos no terminal
 
 Exemplo de uso:
