@@ -2,6 +2,7 @@
 - Gabriell Laurentino Ferreira Bispo
 - João Vitor de Carvalho Silva
 - Pedro Henrique Fernandes
+- Rafael Castro
  
  ## explicação do sistema 
  
