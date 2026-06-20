@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Testes / cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Repositórios clonados temporariamente pela ferramenta
+.cache/
+tmp/
+
+# IDE / SO
+.idea/
+.vscode/
+.DS_Store
