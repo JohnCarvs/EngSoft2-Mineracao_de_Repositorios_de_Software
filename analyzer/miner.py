@@ -12,7 +12,7 @@ from analyzer.models import Commit, MinedRepo
 
 def _repo_name(repo_url: str) -> str:
     """Extrai um nome legível a partir da URL/caminho do repositório."""
-    name = repo_url.rstrip("/").split("/")[-1]
+    name = repo_url.replace("\\", "/").rstrip("/").split("/")[-1]
     if name.endswith(".git"):
         name = name[: -len(".git")]
     return name or repo_url
@@ -24,7 +24,9 @@ def _changed_files(commit) -> list[str]:
     for mod in commit.modified_files:
         path = mod.new_path or mod.old_path
         if path:
-            paths.append(path)
+            # Normaliza para barras "/" para que o contrato seja
+            # independente do sistema operacional (Windows usa "\").
+            paths.append(path.replace("\\", "/"))
     return paths
 
 
