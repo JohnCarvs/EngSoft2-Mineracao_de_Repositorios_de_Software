@@ -24,7 +24,8 @@ Cada lente vira uma coluna; juntas, alimentam um **score de risco combinado** po
 ## Tecnologias utilizadas
 
 - **Python 3** — linguagem da ferramenta.
-- **[PyDriller](https://pydriller.readthedocs.io/)** — biblioteca de mineração de repositórios; abstrai o histórico de commits, arquivos modificados e autoria.
+- **Git** — o backend de mineração padrão usa `git log` nativo, que lista os arquivos modificados por commit sem calcular diffs, tornando a análise muito rápida mesmo em repositórios grandes.
+- **[PyDriller](https://pydriller.readthedocs.io/)** — biblioteca de mineração de repositórios disponível como backend alternativo (opção `--miner pydriller`).
 - **[Rich](https://rich.readthedocs.io/)** — renderização das tabelas de resultado no terminal.
 - **[pytest](https://docs.pytest.org/)** — testes de unidade.
 - **GitHub Actions** — execução automática dos testes a cada push e pull request.
@@ -52,13 +53,17 @@ Passe a URL de um repositório no GitHub:
 python main.py --repo https://github.com/user/repo
 ```
 
-Opções úteis:
+Opções:
 
 ```bash
-python main.py --repo <url> --top 20        # mostra os 20 arquivos de maior risco
+python main.py --repo <url> --top 20            # nº de arquivos no ranking (padrão: 10)
+python main.py --repo <url> --sort-by change    # ordena por outra coluna (score, change, truck, fix)
+python main.py --repo <url> --miner pydriller   # usa o backend PyDriller (padrão: git)
 ```
 
-A saída é uma tabela no terminal, ordenada pelo score de risco, com as colunas de change frequency, truck factor e correções de cada arquivo.
+A saída é uma tabela no terminal com as colunas de change frequency, truck factor, fix ratio e o score combinado de cada arquivo, seguida de uma **conclusão textual** que aponta o arquivo de maior risco e o porquê.
+
+Por padrão a tabela é ordenada pelo score. A opção `--sort-by` permite ordenar por qualquer coluna, mas a coluna `# (score)` sempre mostra a posição do arquivo no ranking de score — assim é possível ver, por exemplo, que o arquivo mais alterado não é necessariamente o de maior risco.
 
 ## Como executar os testes localmente
 
