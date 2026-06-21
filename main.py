@@ -1,6 +1,13 @@
 """Ponto de entrada da CLI do GitHubRepoAnalytics."""
 import argparse
 
+from rich.console import Console
+
+from analyzer.miner import mine
+from analyzer.mocks import mock_change_frequency, mock_commits, mock_truck_factor
+from analyzer.report import render
+from analyzer.score import combine
+
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
@@ -24,10 +31,23 @@ def parse_args(argv=None):
 
 def main(argv=None):
     args = parse_args(argv)
-    print(f"Repositório: {args.repo}")
-    print(f"Top: {args.top}")
-    # A orquestração (minerador -> análises -> score -> relatório)
-    # será conectada nas próximas etapas.
+    console = Console()
+
+    with console.status(
+        f"Clonando e minerando {args.repo}... "
+        "(pode demorar em repositórios grandes)"
+    ):
+        mined = mine(args.repo)
+    console.print(f"[green]OK[/green] - {len(mined.commits)} commits minerados.")
+
+    # Análises mockadas temporárias até as implementações reais ficarem
+    # prontas. Ver instruções de integração em analyzer/mocks.py.
+    change_freq = mock_change_frequency(mined)
+    truck = mock_truck_factor(mined)
+    fixes = mock_commits(mined)
+
+    ranking = combine(change_freq, truck, fixes)
+    render(ranking[: args.top], repo_name=mined.name)
 
 
 if __name__ == "__main__":

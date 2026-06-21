@@ -14,7 +14,7 @@ def build_table(rows: list[RiskRow], repo_name: str = "") -> Table:
     """Monta a tabela do ranking de risco a partir das linhas fornecidas."""
     title = "Risco de manutenção"
     if repo_name:
-        title += f" — {repo_name}"
+        title += f" - {repo_name}"
 
     table = Table(title=title)
     table.add_column("#", justify="right", no_wrap=True)
