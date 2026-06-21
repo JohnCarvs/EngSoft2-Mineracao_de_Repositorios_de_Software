@@ -26,6 +26,19 @@ def parse_args(argv=None):
         default=10,
         help="Quantidade de arquivos a exibir no ranking (padrão: 10).",
     )
+    parser.add_argument(
+        "--sort-by",
+        choices=["score", "change", "truck", "fix"],
+        default="score",
+        help="Coluna usada para ordenar a tabela (padrão: score). A posição no "
+        "ranking de score é sempre exibida na coluna '# (score)'.",
+    )
+    parser.add_argument(
+        "--miner",
+        choices=["git", "pydriller"],
+        default="git",
+        help="Backend de mineração (padrão: git, mais rápido).",
+    )
     return parser.parse_args(argv)
 
 
@@ -37,7 +50,7 @@ def main(argv=None):
         f"Clonando e minerando {args.repo}... "
         "(pode demorar em repositórios grandes)"
     ):
-        mined = mine(args.repo)
+        mined = mine(args.repo, backend=args.miner)
     console.print(f"[green]OK[/green] - {len(mined.commits)} commits minerados.")
 
     # Análises mockadas temporárias até as implementações reais ficarem
@@ -47,7 +60,7 @@ def main(argv=None):
     fixes = mock_commits(mined)
 
     ranking = combine(change_freq, truck, fixes)
-    render(ranking[: args.top], repo_name=mined.name)
+    render(ranking[: args.top], repo_name=mined.name, sort_by=args.sort_by)
 
 
 if __name__ == "__main__":
