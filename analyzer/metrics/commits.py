@@ -40,6 +40,10 @@ def analyze(repo):
             if kind == "fix":
                 fixes[path] += 1
 
-    # retorno provisório; cálculo final virá em commits seguintes
-    return {}
+    # calcula proporção de 'fix' por arquivo
+    result = {}
+    for path, tot in totals.items():
+        result[path] = fixes.get(path, 0) / tot
+
+    return result
 
