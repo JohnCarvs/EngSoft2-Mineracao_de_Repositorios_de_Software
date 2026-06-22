@@ -26,3 +26,8 @@ def test_analyze_fix_ratio(make_repo, make_commit):
     res = analyze(repo)
     assert res["app.py"] == pytest.approx(2 / 3)
     assert res["util.py"] == pytest.approx(1 / 2)
+
+
+def test_analyze_empty_repo(make_repo):
+    repo = make_repo([])
+    assert analyze(repo) == {}
