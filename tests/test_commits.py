@@ -31,3 +31,7 @@ def test_analyze_fix_ratio(make_repo, make_commit):
 def test_analyze_empty_repo(make_repo):
     repo = make_repo([])
     assert analyze(repo) == {}
+
+
+def test_classify_case_insensitive():
+    assert classify("FIX: corrige bug") == "fix"
