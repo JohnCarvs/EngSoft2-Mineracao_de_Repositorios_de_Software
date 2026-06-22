@@ -18,6 +18,10 @@ _TYPE_RE = re.compile(r"^\s*([A-Za-z0-9]+)(?:\([^)]+\))?\s*:")
 def classify(message: str) -> str:
     """Extrai o tipo da mensagem (ex.: 'fix', 'feat').
 
+    Suporta formatos:
+    - "tipo: descrição"
+    - "tipo(escopo): descrição"
+
     Retorna 'outro' quando não for possível identificar.
     """
     if not message:
