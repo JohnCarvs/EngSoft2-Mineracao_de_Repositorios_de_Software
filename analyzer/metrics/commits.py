@@ -12,7 +12,7 @@ from typing import Dict
 from analyzer.models import MinedRepo, MetricResult
 
 
-_TYPE_RE = re.compile(r"^\s*([A-Za-z0-9]+)(?:\([^)]+\))?\s*:")
+_TYPE_RE = re.compile(r"^\s*([A-Za-z0-9-]+)(?:\([^)]+\))?(!)?\s*:")
 
 
 def classify(message: str) -> str:
@@ -29,6 +29,7 @@ def classify(message: str) -> str:
     m = _TYPE_RE.match(message)
     if not m:
         return "outro"
+    # group(1) é o tipo; normalizamos para minúsculas
     return m.group(1).lower()
 
 
