@@ -53,3 +53,21 @@ def test_build_table_uma_linha_por_arquivo():
     table = build_table(rows)
 
     assert len(table.columns[0]._cells) == 2
+
+
+def test_build_table_marca_coluna_ordenada_com_asterisco():
+    table = build_table([_linha("a.py", score=1.0)], sort_by="change")
+
+    headers = [str(c.header) for c in table.columns]
+    assert any("*" in h and "Change" in h for h in headers)
+
+
+def test_build_table_preserva_posicao_no_score_ao_ordenar_por_outra_coluna():
+    # 'b' tem o maior score (#1); 'a' tem o maior change.
+    rows = [_linha("b.py", cf=1, score=2.0), _linha("a.py", cf=100, score=1.0)]
+
+    table = build_table(rows, sort_by="change")
+
+    # Ordenada por change, 'a' vem primeiro, mas mantém a posição #2 no score.
+    assert table.columns[1]._cells[0] == "a.py"
+    assert table.columns[0]._cells[0] == "2"
