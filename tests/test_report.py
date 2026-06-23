@@ -1,6 +1,6 @@
 """Testes do relatório: tabela, conclusão e renderização."""
 from analyzer.models import RiskRow
-from analyzer.report import conclusion
+from analyzer.report import build_table, conclusion
 
 
 def _linha(nome, cf=1.0, tf=0.0, fix=0.0, score=0.0):
@@ -39,3 +39,17 @@ def test_conclusion_menciona_fix_quando_positivo():
     rows = [_linha("a.py", cf=10, tf=0.0, fix=0.5, score=1.5)]
 
     assert "fix ratio" in conclusion(rows)
+
+
+def test_build_table_tem_seis_colunas():
+    table = build_table([_linha("a.py", score=1.0)])
+
+    assert len(table.columns) == 6
+
+
+def test_build_table_uma_linha_por_arquivo():
+    rows = [_linha("a.py", score=2.0), _linha("b.py", score=1.0)]
+
+    table = build_table(rows)
+
+    assert len(table.columns[0]._cells) == 2
