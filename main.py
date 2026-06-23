@@ -3,9 +3,8 @@ import argparse
 
 from rich.console import Console
 
-from analyzer.metrics import commits, change_frequency, truck_factor
+from analyzer.metrics import change_frequency, commits, truck_factor
 from analyzer.miner import mine
-from analyzer.mocks import mock_change_frequency, mock_truck_factor
 from analyzer.report import render
 from analyzer.score import combine
 
