@@ -3,8 +3,9 @@ import argparse
 
 from rich.console import Console
 
+from analyzer.metrics import commits
 from analyzer.miner import mine
-from analyzer.mocks import mock_change_frequency, mock_commits, mock_truck_factor
+from analyzer.mocks import mock_change_frequency, mock_truck_factor
 from analyzer.report import render
 from analyzer.score import combine
 
@@ -53,11 +54,9 @@ def main(argv=None):
         mined = mine(args.repo, backend=args.miner)
     console.print(f"[green]OK[/green] - {len(mined.commits)} commits minerados.")
 
-    # Análises mockadas temporárias até as implementações reais ficarem
-    # prontas. Ver instruções de integração em analyzer/mocks.py.
-    change_freq = mock_change_frequency(mined)
-    truck = mock_truck_factor(mined)
-    fixes = mock_commits(mined)
+    change_freq = mock_change_frequency.analyze(mined)
+    truck = mock_truck_factor.analyze(mined)
+    fixes = commits.analyze(mined)
 
     ranking = combine(change_freq, truck, fixes)
     render(ranking[: args.top], repo_name=mined.name, sort_by=args.sort_by)
