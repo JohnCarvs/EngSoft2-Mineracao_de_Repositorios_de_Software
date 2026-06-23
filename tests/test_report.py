@@ -1,6 +1,10 @@
 """Testes do relatório: tabela, conclusão e renderização."""
+from io import StringIO
+
+from rich.console import Console
+
 from analyzer.models import RiskRow
-from analyzer.report import build_table, conclusion
+from analyzer.report import build_table, conclusion, render
 
 
 def _linha(nome, cf=1.0, tf=0.0, fix=0.0, score=0.0):
@@ -71,3 +75,22 @@ def test_build_table_preserva_posicao_no_score_ao_ordenar_por_outra_coluna():
     # Ordenada por change, 'a' vem primeiro, mas mantém a posição #2 no score.
     assert table.columns[1]._cells[0] == "a.py"
     assert table.columns[0]._cells[0] == "2"
+
+
+def test_render_imprime_tabela_e_conclusao():
+    buf = StringIO()
+
+    render([_linha("app.py", cf=5, score=1.0)], repo_name="proj",
+           console=Console(file=buf, width=120))
+
+    saida = buf.getvalue()
+    assert "app.py" in saida
+    assert "Conclusão" in saida
+
+
+def test_render_lista_vazia_avisa():
+    buf = StringIO()
+
+    render([], console=Console(file=buf, width=120))
+
+    assert "Nenhum arquivo analisado" in buf.getvalue()
