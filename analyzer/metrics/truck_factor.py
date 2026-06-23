@@ -6,7 +6,7 @@ from analyzer.models import MinedRepo, MetricResult
 
 
 def analyze(repo: MinedRepo) -> MetricResult:
-    result = defaultdict(float, 0.)
+    result = defaultdict(float)
 
     return result
 
